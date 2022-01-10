@@ -2,6 +2,36 @@
 Project Micro Service
 
 
+pipeline {
+ agent {
+ node {
+ label 'nodejs'
+ }
+ }
+ stages {
+ stage('Checkout') {
+ steps {
+ git url: 'https://github.com/aksheykotwal/DO400-apps', branch:
+ 'scripted-pipelines'
+ }
+ }
+ stage('Test') {
+ steps {
+ sh 'simple-webapp/backend/test_api.sh'
+ }
+ }
+ stage('Deploy') {
+ steps {
+ echo 'Deploying...'
+ }
+ }
+ }
+}
+
+
+
+
+---------------
 node('nodejs') {
  stage('Checkout') {
  git url: 'https://github.com/YOUR_GITHUB_USER/DO400-apps', branch:
