@@ -2,15 +2,33 @@
 Project Micro Service
 
 
-node('nodejs') { 
- stage('Checkout') { 
+node('nodejs') {
+ stage('Checkout') {
  git url: 'https://github.com/YOUR_GITHUB_USER/DO400-apps', branch:
  'scripted-pipelines'
  }
- stage('Test') { 
+ stage('Test') {
+ if (isChanged('simple-webapp/backend')) {
+ echo 'Detected Backend changes'
  sh 'node ./simple-webapp/backend/test.js'
+ }
+ if (isChanged('simple-webapp/frontend')) {
+ echo 'Detected Frontend changes'
  sh 'node ./simple-webapp/frontend/test.js'
  }
+ }
+}
+def isChanged(dir) {
+ changedFilepaths = sh(
+ script: 'git diff-tree --no-commit-id --name-only -r HEAD',
+ returnStdout: true
+ ).trim().split('\n')
+ for (filepath in changedFilepaths) {
+ if (filepath.startsWith(dir)) {
+ return true;
+ }
+ }
+ return false
 }
 
 
