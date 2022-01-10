@@ -1,6 +1,22 @@
 # prjs-services
 Project Micro Service
 
+
+node('nodejs') { 
+ stage('Checkout') { 
+ git url: 'https://github.com/YOUR_GITHUB_USER/DO400-apps', branch:
+ 'scripted-pipelines'
+ }
+ stage('Test') { 
+ sh 'node ./simple-webapp/backend/test.js'
+ sh 'node ./simple-webapp/frontend/test.js'
+ }
+}
+
+
+
+
+-----
 pipeline {
  agent any
  stages {
